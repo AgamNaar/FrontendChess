@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="431.0"
+      prefWidth="601.0" style="-fx-background-color: #D1BEB0;" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chessfrontend.controllers.LoginPageController">
+    <HBox alignment="CENTER" prefHeight="106.0" prefWidth="602.0">
+        <Text fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER"
+              wrappingWidth="602.13671875">
+            <font>
+                <Font name="Agency FB" size="50.0"/>
+            </font>
+        </Text>
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0">
+        <TextField fx:id="UserNameText" prefHeight="48.0" prefWidth="246.0" promptText="User Name"
+                   style="-fx-background-color: #DDDBF1;">
+            <font>
+                <Font name="Agency FB" size="20.0"/>
+            </font>
+        </TextField>
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0">
+        <TextField fx:id="PasswordText" prefHeight="48.0" prefWidth="246.0" promptText="Password"
+                   style="-fx-background-color: #DDDBF1;">
+            <font>
+                <Font name="Agency FB" size="20.0"/>
+            </font>
+        </TextField>
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #D1BEB0;">
+        <Button mnemonicParsing="false" onAction="#LoginClicked" prefHeight="47.0"
+                prefWidth="159.0" style="-fx-background-color: #DDDBF1;" text="Login" textFill="#3c4f76">
+            <font>
+                <Font name="Agency FB" size="20.0"/>
+            </font>
+        </Button>
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #D1BEB0;">
+        <Button mnemonicParsing="false" onAction="#CreateNewAccountClicked"
+                prefHeight="48.0" prefWidth="159.0" style="-fx-background-color: #DDDBF1;" text="Create New Account"
+                textFill="#3c4f76">
+            <font>
+                <Font name="Agency FB" size="20.0"/>
+            </font>
+        </Button>
+    </HBox>
+</VBox>
