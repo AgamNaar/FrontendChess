@@ -1,6 +1,8 @@
 package com.example.chessfrontend;
 
+import com.example.chessfrontend.modulus.GameRecord;
 import com.example.chessfrontend.modulus.GameUser;
+import com.example.chessfrontend.servercommunication.GamePlayServant;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,8 +26,9 @@ public class Utilities {
     public static final String URL = "/com/example/chessfrontend/";
     public static final String CREATE_NEW_ACCOUNT_PAGE_PATH = URL + "CreateNewAccountPage.fxml";
     public static final String GAME_LOBBY_PATH = URL + "GameLobbyPage.fxml";
-    public static final String CHESS_GAME_LOBBY_PATH = URL + "ChessGamePage.fxml";
-    public static final String PLAYER_LEADER_BOARD_TEMPLATE_PATH = URL + "PlayerLeaderBoardTemplate.fxml";
+    public static final String CHESS_GAME_PATH = URL + "ChessGamePage.fxml";
+    public static final String PLAYER_RECORD_PATH = URL + "PlayerRecord.fxml";
+    public static final String GAME_RECORD_PATH = URL + "GameRecord.fxml";
 
     // Constants for rating limits
     public static final int MIN_RATING = 1;
@@ -38,10 +41,14 @@ public class Utilities {
     public static final String MISSING_INFORMATION = "Please fill all fields";
     public static final String INVALID_ELO = "Invalid elo, must be a whole number between "
             + MIN_RATING + " - " + MAX_RATING;
+    private static final String GAME_RECORD_REGEX
+            = "OnlineChessGame\\{gameID=(\\d+),\\s*whiteUserName='([^']+)',\\s*blackUserName='([^']+)'," +
+            "\\s*winnerName='([^']+)',\\s*whitePlayerRating=(\\d+),\\s*blackPlayerRating=(\\d+)}";
 
     // Current user's game information
     private static GameUser gameUser;
     private static int currentGameID;
+    private static GamePlayServant gamePlayServant;
 
     /**
      * Navigates to the specified FXML page upon an action event.
@@ -95,6 +102,68 @@ public class Utilities {
         alert.show();
     }
 
+    /**
+     * Parses a string representation of a list of GameUser objects into a list of GameUser objects.
+     *
+     * @param input The string representation of the list.
+     * @return A list of GameUser objects.
+     */
+    public LinkedList<GameUser> parseGameUserList(String input) {
+        LinkedList<GameUser> userList = new LinkedList<>();
+
+        // Define a regular expression pattern to match GameUser representations
+        Pattern pattern = Pattern.compile(GAME_USER_RATING_USERNAME_JSON_REGEX);
+
+        // Create a matcher for the input string
+        Matcher matcher = pattern.matcher(input);
+
+        // Iterate through the matches and extract userName and rating
+        while (matcher.find()) {
+            String userName = matcher.group(1);
+            int rating = Integer.parseInt(matcher.group(2));
+
+            // Creating a new GameUser object and adding it to the list
+            userList.add(new GameUser(userName, rating));
+        }
+
+        return userList;
+    }
+
+    /**
+     * Parses a string representation of a list of game records objects into a list of GameRecord objects.
+     *
+     * @param input The string representation of the list.
+     * @return A list of GameUser objects.
+     */
+    public LinkedList<GameRecord> parseGameRecordList(String input) {
+        LinkedList<GameRecord> gameRecordList = new LinkedList<>();
+
+        // Define pattern to match each OnlineChessGame object
+        Pattern pattern = Pattern.compile(GAME_RECORD_REGEX);
+
+        // Match the pattern against the input string
+        Matcher matcher = pattern.matcher(input);
+
+        // Iterate through matches
+        while (matcher.find()) {
+            // Extract relevant information from the match
+            // Extract relevant information from the match
+            int gameID = Integer.parseInt(matcher.group(1));
+            String whiteUserName = matcher.group(2);
+            String blackUserName = matcher.group(3);
+            String winnerName = matcher.group(4);
+            int whitePlayerRating = Integer.parseInt(matcher.group(5));
+            int blackPlayerRating = Integer.parseInt(matcher.group(6));
+
+            // Create a new GameRecord object and add it to the list
+            GameRecord gameRecord = new GameRecord(whiteUserName, blackUserName,
+                    whitePlayerRating, blackPlayerRating, winnerName, gameID);
+
+            gameRecordList.add(gameRecord);
+        }
+
+        return gameRecordList;
+    }
 
     /**
      * Sets the current game ID.
@@ -133,30 +202,20 @@ public class Utilities {
     }
 
     /**
-     * Parses a string representation of a list of GameUser objects into a list of GameUser objects.
+     * Retrieves the GamePlayServant instance.
      *
-     * @param input The string representation of the list.
-     * @return A list of GameUser objects.
+     * @return The GamePlayServant instance
      */
-    public LinkedList<GameUser> parseList(String input) {
-        LinkedList<GameUser> userList = new LinkedList<>();
-
-        // Define a regular expression pattern to match GameUser representations
-        Pattern pattern = Pattern.compile(GAME_USER_RATING_USERNAME_JSON_REGEX);
-
-        // Create a matcher for the input string
-        Matcher matcher = pattern.matcher(input);
-
-        // Iterate through the matches and extract userName and rating
-        while (matcher.find()) {
-            String userName = matcher.group(1);
-            int rating = Integer.parseInt(matcher.group(2));
-
-            // Creating a new GameUser object and adding it to the list
-            userList.add(new GameUser(userName, rating));
-        }
-
-        return userList;
+    public GamePlayServant getGamePlayServant() {
+        return gamePlayServant;
     }
 
+    /**
+     * Sets the GamePlayServant instance.
+     *
+     * @param gamePlayServant The GamePlayServant instance to set
+     */
+    public void setGamePlayServant(GamePlayServant gamePlayServant) {
+        Utilities.gamePlayServant = gamePlayServant;
+    }
 }

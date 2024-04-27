@@ -21,7 +21,7 @@ public class ServerRequestHandler {
     private static final String USER_URL = SERVER_URL + "/user";
     private static final String LOGIN_URL = USER_URL + "/login";
     private static final String CREATE_ACCOUNT_URL = USER_URL + "/create";
-    private static final String GET_TOP_5_URL = USER_URL + "/get-top5";
+    private static final String GET_TOP_100_URL = USER_URL + "/get-top100";
     private static final String FIND_PLAYER_URL = USER_URL + "/get-user";
 
     private static final String MATCHMAKING_URL = SERVER_URL + "/matchmaking";
@@ -31,10 +31,11 @@ public class ServerRequestHandler {
     private static final String CANCEL_INVITATION_GAME_URL = MATCHMAKING_URL + "/cancel-invention";
 
 
-    private static final String GAMEPLAY_URL = SERVER_URL + "/game/online";
-    private static final String SUBMIT_MOVE_URL = GAMEPLAY_URL + "/submit-move/";
-    private static final String GET_MATCH_PLAYER_URL = GAMEPLAY_URL + "/get-players/";
-    private static final String RESIGN_THE_GAME_URL = GAMEPLAY_URL + "/resign/";
+    private static final String ONLINE_GAME_URL = SERVER_URL + "/game/online";
+    private static final String SUBMIT_MOVE_URL = ONLINE_GAME_URL + "/submit-move/";
+    private static final String GET_MATCH_PLAYER_URL = ONLINE_GAME_URL + "/get-players/";
+    private static final String RESIGN_THE_GAME_URL = ONLINE_GAME_URL + "/resign/";
+    private static final String GET_MATCH_HISTORY_URL = ONLINE_GAME_URL + "/match-history100";
 
     // HTTP request methods
     private static final String POST = "POST";
@@ -44,6 +45,16 @@ public class ServerRequestHandler {
     // HTTP status codes
     public static final int HTTP_OK = 200;
     private static final int TIME_OUT_MILLISECOND = 20 * 1000;
+
+    /**
+     * Retrieves the match history for the specified game user from the server.
+     *
+     * @param gameUser The game user for whom to retrieve match history
+     * @return A ServerResponse object containing the response from the server
+     */
+    public ServerResponse getMatchHistory(GameUser gameUser) {
+        return sendNewRequestToServer(POST, gameUser.convertIntoJson(), GET_MATCH_HISTORY_URL);
+    }
 
     /**
      * Sends a request to join a game invitation with the specified game code ID and user information.
@@ -146,12 +157,12 @@ public class ServerRequestHandler {
     }
 
     /**
-     * Retrieves the top five players from the server.
+     * Retrieves the top 100 players from the server.
      *
-     * @return the server response containing information about the top four players
+     * @return the server response containing information about the top 100 players
      */
-    public ServerResponse getTopFivePlayers() {
-        return sendNewRequestToServer(GET, EMPTY_PAYLOAD, GET_TOP_5_URL);
+    public ServerResponse getTop100Players() {
+        return sendNewRequestToServer(GET, EMPTY_PAYLOAD, GET_TOP_100_URL);
     }
 
     /**
