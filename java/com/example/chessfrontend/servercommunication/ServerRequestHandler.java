@@ -16,16 +16,20 @@ import static com.example.chessfrontend.modulus.ChessBoard.DEFAULT_PROMOTION;
  */
 public class ServerRequestHandler {
     // URL constants for server endpoints
-    public static final String SERVER_URL = "http://localhost:8080";
+    private static final String SERVER_URL = "http://localhost:8080";
 
-    public static final String USER_URL = SERVER_URL + "/user";
-    public static final String LOGIN_URL = USER_URL + "/login";
-    public static final String CREATE_ACCOUNT_URL = USER_URL + "/create";
+    private static final String USER_URL = SERVER_URL + "/user";
+    private static final String LOGIN_URL = USER_URL + "/login";
+    private static final String CREATE_ACCOUNT_URL = USER_URL + "/create";
     private static final String GET_TOP_5_URL = USER_URL + "/get-top5";
     private static final String FIND_PLAYER_URL = USER_URL + "/get-user";
 
     private static final String MATCHMAKING_URL = SERVER_URL + "/matchmaking";
     private static final String FIND_MATCH_URL = MATCHMAKING_URL + "/find-match";
+    private static final String JOIN_INVITATION_GAME_URL = MATCHMAKING_URL + "/join-invention/";
+    private static final String CREATE_INVITATION_GAME_URL = MATCHMAKING_URL + "/create-invention";
+    private static final String CANCEL_INVITATION_GAME_URL = MATCHMAKING_URL + "/cancel-invention";
+
 
     private static final String GAMEPLAY_URL = SERVER_URL + "/game/online";
     private static final String SUBMIT_MOVE_URL = GAMEPLAY_URL + "/submit-move/";
@@ -33,13 +37,45 @@ public class ServerRequestHandler {
     private static final String RESIGN_THE_GAME_URL = GAMEPLAY_URL + "/resign/";
 
     // HTTP request methods
-    public static final String POST = "POST";
-    public static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final String GET = "GET";
     private static final String EMPTY_PAYLOAD = "";
 
     // HTTP status codes
     public static final int HTTP_OK = 200;
     private static final int TIME_OUT_MILLISECOND = 20 * 1000;
+
+    /**
+     * Sends a request to join a game invitation with the specified game code ID and user information.
+     *
+     * @param gameCodedID The ID of the game invitation to join.
+     * @param gameUser    The user information.
+     * @return A ServerResponse indicating the status of the join request.
+     */
+    public ServerResponse joinGameInvention(String gameCodedID, GameUser gameUser) {
+        return sendNewRequestToServer(POST, gameUser.convertIntoJson(), JOIN_INVITATION_GAME_URL + gameCodedID);
+    }
+
+    /**
+     * Sends a request to create a game invitation with the specified user information.
+     *
+     * @param gameUser The user information.
+     * @return A ServerResponse indicating the status of the create invitation request.
+     */
+    public ServerResponse createGameInvention(GameUser gameUser) {
+        return sendNewRequestToServer(POST, gameUser.convertIntoJson(), CREATE_INVITATION_GAME_URL);
+    }
+
+    /**
+     * Sends a request to cancel a game invitation with the specified user information.
+     *
+     * @param gameUser The user information.
+     * @return A ServerResponse indicating the status of the cancel invitation request.
+     */
+    public ServerResponse cancelGameInvention(GameUser gameUser) {
+        return sendNewRequestToServer(POST, gameUser.convertIntoJson(), CANCEL_INVITATION_GAME_URL);
+    }
+
 
     /**
      * Sends a request to the server to resign the game with the specified game ID.

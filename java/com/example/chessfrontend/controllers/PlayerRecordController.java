@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 /**
  * Controller class for a player record in a leaderboard.
  */
-public class PlayerRecordLeaderBoardController extends Region {
+public class PlayerRecordController extends Region {
 
     @FXML
     private Text NameText; // Text field for displaying the player's name
