@@ -2,23 +2,21 @@ package com.example.chessfrontend.modulus;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Entity class representing a game user.
  */
 public class GameUser {
 
-    private String userName;
+    public static final String GAME_USER_RATING_USERNAME_JSON_REGEX = "GameUser\\{userName='(.*?)', rating=(\\d+)}";
+
+    private final String userName;
     private String email;
     private String password;
     private int rating;
     private String token;
-
-    /**
-     * Default constructor.
-     */
-    public GameUser() {
-    }
 
     /**
      * Constructor with username and rating.
@@ -67,24 +65,6 @@ public class GameUser {
     }
 
     /**
-     * Getter for the email.
-     *
-     * @return the email of the user
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Getter for the password.
-     *
-     * @return the password of the user
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
      * Getter for the rating.
      *
      * @return the rating of the user
@@ -100,33 +80,6 @@ public class GameUser {
      */
     public String getToken() {
         return token;
-    }
-
-    /**
-     * Setter for the username.
-     *
-     * @param userName the username to set
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * Setter for the email.
-     *
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Setter for the password.
-     *
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
@@ -199,5 +152,30 @@ public class GameUser {
 
         stringBuilder.append("}");
         return stringBuilder.toString();
+    }
+
+    /**
+     * Parses a string representation of a GameUser object into a GameUser object.
+     *
+     * @param input The string representation of the GameUser.
+     */
+    public GameUser(String input) {
+        // Define a regular expression pattern to match the GameUser representation
+        Pattern pattern = Pattern.compile(GAME_USER_RATING_USERNAME_JSON_REGEX);
+
+        // Create a matcher for the input string
+        Matcher matcher = pattern.matcher(input);
+
+        // Check if there is a match
+        if (matcher.find()) {
+            String userName = matcher.group(1);
+            int rating = Integer.parseInt(matcher.group(2));
+
+            this.userName = userName;
+            this.rating = rating;
+        } else {
+            // Handle the case where there is no match
+            throw new IllegalArgumentException("Invalid input string: " + input);
+        }
     }
 }

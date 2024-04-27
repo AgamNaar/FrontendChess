@@ -53,16 +53,16 @@ public class LoginPageController {
 
         // Handle null response (unexpected error)
         if (response == null) {
-            utilities.popupAlert(UNEXPECTED_ERROR);
+            utilities.waitPopupAlert(UNEXPECTED_ERROR);
             return;
         }
 
         // If the server response indicates an error, display an alert with the error message
         if (response.getHttpStatus() != HTTP_OK)
-            utilities.popupAlert(response.getResponse());
+            utilities.waitPopupAlert(response.getResponse());
         else {
             // If login is successful, display success message, set user token, and redirect to game lobby
-            utilities.popupAlert(SUCCESSFULLY_LODGED_IN);
+            utilities.waitPopupAlert(SUCCESSFULLY_LODGED_IN);
             gameUser.setToken(response.getResponse());
             utilities.setGameUser(gameUser);
             utilities.goToPage(GAME_LOBBY_PATH, event);

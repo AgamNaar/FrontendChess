@@ -17,22 +17,52 @@ import static com.example.chessfrontend.modulus.ChessBoard.DEFAULT_PROMOTION;
 public class ServerRequestHandler {
     // URL constants for server endpoints
     public static final String SERVER_URL = "http://localhost:8080";
+
     public static final String USER_URL = SERVER_URL + "/user";
     public static final String LOGIN_URL = USER_URL + "/login";
     public static final String CREATE_ACCOUNT_URL = USER_URL + "/create";
-    private static final String GET_TOP_4_URL = USER_URL + "/get-top4";
+    private static final String GET_TOP_5_URL = USER_URL + "/get-top5";
     private static final String FIND_PLAYER_URL = USER_URL + "/get-user";
+
     private static final String MATCHMAKING_URL = SERVER_URL + "/matchmaking";
     private static final String FIND_MATCH_URL = MATCHMAKING_URL + "/find-match";
-    private static final String GAMEPLAY_URL = SERVER_URL + "game/online/submit-move/";
+
+    private static final String GAMEPLAY_URL = SERVER_URL + "/game/online";
+    private static final String SUBMIT_MOVE_URL = GAMEPLAY_URL + "/submit-move/";
+    private static final String GET_MATCH_PLAYER_URL = GAMEPLAY_URL + "/get-players/";
+    private static final String RESIGN_THE_GAME_URL = GAMEPLAY_URL + "/resign/";
 
     // HTTP request methods
     public static final String POST = "POST";
     public static final String GET = "GET";
+    private static final String EMPTY_PAYLOAD = "";
 
     // HTTP status codes
     public static final int HTTP_OK = 200;
     private static final int TIME_OUT_MILLISECOND = 20 * 1000;
+
+    /**
+     * Sends a request to the server to resign the game with the specified game ID.
+     *
+     * @param gameID The ID of the game to resign.
+     * @return A ServerResponse indicating the status of the resignation request.
+     */
+    public ServerResponse reignTheGame(int gameID) {
+        // Send a POST request to the server to resign the game
+        return sendNewRequestToServer(POST, EMPTY_PAYLOAD, RESIGN_THE_GAME_URL + gameID);
+    }
+
+    /**
+     * Retrieves the players involved in the match with the specified ID from the server.
+     *
+     * @param currentGameID The ID of the match to retrieve player information.
+     * @return A ServerResponse containing the player information for the match.
+     */
+    public ServerResponse getPlayerOfMatch(int currentGameID) {
+        // Send a GET request to the server to retrieve player information for the match
+        return sendNewRequestToServer(GET, EMPTY_PAYLOAD, GET_MATCH_PLAYER_URL + currentGameID);
+    }
+
 
     /**
      * Submits a move to the server for the specified game.
@@ -46,7 +76,7 @@ public class ServerRequestHandler {
     public ServerResponse submitMove(GameUser gameUser, int initialSquareNumber,
                                      int targetSquareNumber, int currentGameID) {
         String jsonPayLoad = parseIntoJson(gameUser, initialSquareNumber, targetSquareNumber);
-        return sendNewRequestToServer(POST, jsonPayLoad, GAMEPLAY_URL + currentGameID);
+        return sendNewRequestToServer(POST, jsonPayLoad, SUBMIT_MOVE_URL + currentGameID);
     }
 
     /**
@@ -80,12 +110,12 @@ public class ServerRequestHandler {
     }
 
     /**
-     * Retrieves the top four players from the server.
+     * Retrieves the top five players from the server.
      *
      * @return the server response containing information about the top four players
      */
-    public ServerResponse getTopFourPlayers() {
-        return sendNewRequestToServer(GET, "", GET_TOP_4_URL);
+    public ServerResponse getTopFivePlayers() {
+        return sendNewRequestToServer(GET, EMPTY_PAYLOAD, GET_TOP_5_URL);
     }
 
     /**
@@ -117,6 +147,7 @@ public class ServerRequestHandler {
             connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setConnectTimeout(TIME_OUT_MILLISECOND);
+            connection.setReadTimeout(TIME_OUT_MILLISECOND);
             connection.setDoOutput(true);
 
             // Only write to output stream if the request method is POST

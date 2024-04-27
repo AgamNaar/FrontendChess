@@ -13,5 +13,7 @@ module com.example.chessfrontend {
     exports com.example.chessfrontend.modulus.gamelogic.pieces;
     exports com.example.chessfrontend.modulus.gamelogic.specialmoves;
     exports com.example.chessfrontend.modulus.gamelogic.pieces.logic;
+    exports com.example.chessfrontend.servercommunication to java.rmi;
+
 }
 

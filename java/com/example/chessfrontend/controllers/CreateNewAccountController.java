@@ -57,16 +57,16 @@ public class CreateNewAccountController {
 
         // Handle null response (unexpected error)
         if (response == null) {
-            utilities.popupAlert(UNEXPECTED_ERROR);
+            utilities.waitPopupAlert(UNEXPECTED_ERROR);
             return;
         }
 
         // If the server response indicates an error, display an alert with the error message
         if (response.getHttpStatus() != HTTP_OK)
-            utilities.popupAlert(response.getResponse());
+            utilities.waitPopupAlert(response.getResponse());
         else {
             // If account creation is successful, display success message, set user token, and redirect to game lobby
-            utilities.popupAlert(SUCCESSFULLY_CREATED_ACCOUNT);
+            utilities.waitPopupAlert(SUCCESSFULLY_CREATED_ACCOUNT);
             gameUser.setToken(response.getResponse());
             utilities.setGameUser(gameUser);
             utilities.goToPage(GAME_LOBBY_PATH, event);
@@ -86,7 +86,7 @@ public class CreateNewAccountController {
 
         // Check if any of the fields are empty
         if (email.isEmpty() || password.isEmpty() || ratingStr.isEmpty() || userName.isEmpty()) {
-            utilities.popupAlert(MISSING_INFORMATION);
+            utilities.waitPopupAlert(MISSING_INFORMATION);
             return true;
         }
 
@@ -94,11 +94,11 @@ public class CreateNewAccountController {
         try {
             int rating = Integer.parseInt(ratingStr);
             if (rating < MIN_RATING || rating > MAX_RATING) {
-                utilities.popupAlert(INVALID_ELO);
+                utilities.waitPopupAlert(INVALID_ELO);
                 return true;
             }
         } catch (NumberFormatException e) {
-            utilities.popupAlert(INVALID_ELO);
+            utilities.waitPopupAlert(INVALID_ELO);
             return true; // Rating is not a valid number
         }
 
