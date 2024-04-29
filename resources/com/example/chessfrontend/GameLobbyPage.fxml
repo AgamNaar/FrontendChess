@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0"
+      prefWidth="670.0" style="-fx-border-color: #383F51; -fx-border-width: 4;" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chessfrontend.controllers.GameLobbyController">
+    <VBox minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="221.0" style="-fx-border-color: #383F51;">
+        <VBox prefHeight="62.0" prefWidth="173.0"
+              style="-fx-border-color: #383F51; -fx-border-width: 2; -fx-background-color: #D1BEB0;">
+            <Text fx:id="WelcomeText" fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome: "
+                  textAlignment="CENTER" wrappingWidth="132.5367431640625">
+                <font>
+                    <Font name="Agency FB" size="24.0"/>
+                </font>
+            </Text>
+            <Text fx:id="CurrentRatingText" fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0"
+                  text="Current Rating :" textAlignment="CENTER" wrappingWidth="164.53668212890625">
+                <font>
+                    <Font name="Agency FB" size="24.0"/>
+                </font>
+            </Text>
+        </VBox>
+        <VBox minHeight="157.0" prefHeight="158.0" prefWidth="172.0"
+              style="-fx-border-color: #383F51; -fx-border-width: 2; -fx-background-color: #D1BEB0;">
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="308.0">
+                <Text fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0" text="Search for a player:"
+                      textAlignment="CENTER" wrappingWidth="180.5367431640625">
+                    <font>
+                        <Font name="Agency FB" size="24.0"/>
+                    </font>
+                </Text>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="308.0">
+                <HBox prefHeight="54.0" prefWidth="17.0"/>
+                <TextField fx:id="SearchPlayerNameText" prefHeight="48.0" prefWidth="146.0" promptText="User Name"
+                           style="-fx-background-color: #DDDBF1;">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </TextField>
+            </HBox>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="53.0" prefWidth="308.0">
+                <HBox prefHeight="54.0" prefWidth="18.0"/>
+                <Button mnemonicParsing="false" onAction="#SearchPlayerClicked" prefHeight="47.0" prefWidth="146.0"
+                        style="-fx-background-color: #DDDBF1;" text="Search" textFill="#3c4f76">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </Button>
+            </HBox>
+        </VBox>
+        <VBox prefHeight="302.0" prefWidth="216.0"
+              style="-fx-border-color: #383F51; -fx-border-width: 2; -fx-background-color: #D1BEB0;">
+            <HBox alignment="BOTTOM_LEFT" prefHeight="31.0" prefWidth="211.0">
+                <Text fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0" text="Find a match" textAlignment="CENTER"
+                      wrappingWidth="142.936767578125">
+                    <font>
+                        <Font name="Agency FB" size="24.0"/>
+                    </font>
+                </Text>
+            </HBox>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="53.0" prefWidth="308.0">
+                <HBox prefHeight="54.0" prefWidth="18.0"/>
+                <Button fx:id="VsRandomButton" mnemonicParsing="false" onAction="#FindMatchVsRandomClicked"
+                        prefHeight="47.0" prefWidth="146.0" style="-fx-background-color: #DDDBF1;" text="Vs random"
+                        textFill="#3c4f76">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </Button>
+            </HBox>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="53.0" prefWidth="308.0">
+                <HBox prefHeight="54.0" prefWidth="18.0"/>
+                <Button fx:id="NewInviteButton" mnemonicParsing="false" onAction="#NewInviteClicked"
+                        prefHeight="47.0" prefWidth="146.0" style="-fx-background-color: #DDDBF1;" text="New invite"
+                        textFill="#3c4f76">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </Button>
+            </HBox>
+            <HBox alignment="BOTTOM_LEFT" prefHeight="53.0" prefWidth="308.0">
+                <HBox prefHeight="54.0" prefWidth="18.0"/>
+                <Button fx:id="JoinInviteButton" mnemonicParsing="false" onAction="#JoinInviteClicked"
+                        prefHeight="47.0" prefWidth="146.0" style="-fx-background-color: #DDDBF1;"
+                        text="Join invite" textFill="#3c4f76">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </Button>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="211.0">
+                <HBox prefHeight="54.0" prefWidth="17.0"/>
+                <TextField fx:id="GameCodeID" prefHeight="48.0" prefWidth="146.0" promptText="Game code ID"
+                           style="-fx-background-color: #DDDBF1;">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </TextField>
+            </HBox>
+        </VBox>
+    </VBox>
+    <VBox prefHeight="486.0" prefWidth="468.0" style="-fx-border-color: #383F51; -fx-border-width: 2;">
+        <HBox alignment="CENTER" prefHeight="64.0" prefWidth="450.0"
+              style="-fx-border-color: #383F51; -fx-border-width: 2; -fx-background-color: #D1BEB0;">
+            <HBox alignment="CENTER" prefHeight="54.0" prefWidth="194.0"
+                  style="-fx-border-color: #383F51; -fx-background-size: 4;">
+                <Text fx:id="ViewText" fill="#3c4f76" strokeType="OUTSIDE" strokeWidth="0.0" text="LeaderBoard"
+                      textAlignment="CENTER" wrappingWidth="254.93676871061325">
+                    <font>
+                        <Font name="Agency FB" size="40.0"/>
+                    </font>
+                </Text>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="54.0" prefWidth="194.0"
+                  style="-fx-border-color: #383F51; -fx-background-size: 4;">
+                <Button fx:id="ViewButton" mnemonicParsing="false" onAction="#ViewButtonClicked" prefHeight="42.0"
+                        prefWidth="117.0" style="-fx-background-color: #DDDBF1;" text="Match History"
+                        textFill="#3c4f76">
+                    <font>
+                        <Font name="Agency FB" size="20.0"/>
+                    </font>
+                </Button>
+            </HBox>
+        </HBox>
+        <VBox prefHeight="420.0" prefWidth="430.0">
+            <VBox fx:id="ViewVbox" prefHeight="422.0" prefWidth="450.0"/>
+        </VBox>
+    </VBox>
+</HBox>
