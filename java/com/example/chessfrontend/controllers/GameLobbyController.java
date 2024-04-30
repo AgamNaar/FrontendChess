@@ -81,7 +81,6 @@ public class GameLobbyController {
     Utilities utilities = new Utilities();
     ServerRequestHandler serverRequestHandler = new ServerRequestHandler();
     private boolean waitingToAcceptChallenge = false;
-    private boolean isRegistryLive = false;
     private boolean isLeaderBoardView = true;
 
 
@@ -92,15 +91,15 @@ public class GameLobbyController {
      */
     public void initialize() {
         try {
-            // Check if the registry is live; if not, set it up
-            if (!isRegistryLive)
-                setUpRegistry();
-
             // Set up user information
             setUpUserInfo();
 
             // Set up the leaderboard
             setUpLeaderBoard();
+
+            // Check if the registry is live; if not, set it up
+            if (utilities.getGamePlayServant() == null)
+                setUpRegistry();
         } catch (Exception e) {
             // Display an alert popup with the exception message
             utilities.waitPopupAlert(e.toString());
@@ -249,7 +248,6 @@ public class GameLobbyController {
 
         // Update the utilities with the new GamePlayServant and set the registry status to live
         utilities.setGamePlayServant(gamePlayServant);
-        isRegistryLive = true;
     }
 
     /**
@@ -409,7 +407,6 @@ public class GameLobbyController {
     private String nameToJson(String userName) {
         return "{ \"userName\":\"" + userName + "\" }";
     }
-
 
 
 }

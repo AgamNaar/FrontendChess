@@ -5,9 +5,15 @@ import com.example.chessfrontend.modulus.ChessBoard;
 import com.example.chessfrontend.modulus.ChessMove;
 import javafx.application.Platform;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+import static com.example.chessfrontend.Utilities.GAME_LOBBY_PATH;
 
 /**
  * This class represents the implementation of the GamePlayService interface.
@@ -16,6 +22,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class GamePlayServant extends UnicastRemoteObject implements GamePlayService {
 
     private static final Utilities utilities = new Utilities();
+    private static final String ENEMY_HAS_RESIGN_TEXT = "You have won, the enemy has resigned! ";
     private ChessBoard board;
     private Event event;
 
@@ -36,25 +43,52 @@ public class GamePlayServant extends UnicastRemoteObject implements GamePlayServ
      * @throws RemoteException if there is a communication-related exception.
      */
     @Override
-    public void sendMove(String move) throws RemoteException {
+    public void sendMove(ChessMove move) throws RemoteException {
         // Parse the move string into a ChessMove object
-        ChessMove chessMove = parseMove(move);
+        //ChessMove chessMove = parseMove(move);
 
         // Execute the move on the game board
-        board.getGame().executeMove(chessMove.getCurrentPieceSquare(),
-                chessMove.getTargetSquare(),
-                chessMove.getTypeOfPieceToPromoteTo());
+        board.getGame().executeMove(move.getCurrentPieceSquare(),
+                move.getTargetSquare(),
+                move.getTypeOfPieceToPromoteTo());
 
         // Update the graphical representation of the board
-        board.updateBoard();
-        board.setSquareYellow(chessMove.getTargetSquare());
-        board.setSquareYellow(chessMove.getCurrentPieceSquare());
+        Platform.runLater(() -> {
+            board.updateBoard();
+            board.setSquareYellow(move.getTargetSquare());
+            board.setSquareYellow(move.getCurrentPieceSquare());
+        });
     }
 
+    /**
+     * Called when the enemy resigns from the game.
+     * This method updates the UI to notify the player that the enemy has resigned and navigates
+     * to the game lobby.
+     *
+     * @throws RemoteException If there is a communication-related exception during the method invocation.
+     */
     @Override
     public void enemyResigned() throws RemoteException {
-        //TODO: finish later
-        System.out.println("you won!");
+        try {
+            // Run on the JavaFX Application Thread to update the UI
+            Platform.runLater(() -> {
+                // notify player that he has won
+                utilities.waitPopupAlert(ENEMY_HAS_RESIGN_TEXT);
+                // go back to the game lobby
+                Stage stage = (Stage) board.getScene().getWindow();
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(GAME_LOBBY_PATH));
+                    Parent root = loader.load();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (Exception e) {
+                    System.out.println("Error loading the new page: " + e);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -70,47 +104,6 @@ public class GamePlayServant extends UnicastRemoteObject implements GamePlayServ
 
         // Run on the JavaFX Application Thread to update the UI
         Platform.runLater(() -> utilities.goToPage(Utilities.CHESS_GAME_PATH, event));
-    }
-
-
-    /**
-     * Parses a move string into a ChessMove object.
-     *
-     * @param moveString The string representation of the chess move.
-     *                   Format: sourceSquare + targetSquare + typeOfPieceToPromoteTo
-     * @return The ChessMove object representing the parsed move.
-     */
-    private ChessMove parseMove(String moveString) {
-        // Extract source square, target square, and type of piece to promote
-        String sourceSquare = moveString.substring(0, 2);
-        String targetSquare = moveString.substring(2, 4);
-        char typeOfPieceToPromoteTo = moveString.charAt(4);
-
-        // Convert square notation to byte representation
-        byte currentPieceSquare = squareToByte(sourceSquare);
-        byte targetSquareByte = squareToByte(targetSquare);
-
-        // Create and return ChessMove object
-        return new ChessMove(currentPieceSquare, targetSquareByte, typeOfPieceToPromoteTo);
-    }
-
-    /**
-     * Converts a square notation (e.g., "a1") to its byte representation.
-     *
-     * @param square The square notation to be converted.
-     * @return The byte representation of the square.
-     */
-    private byte squareToByte(String square) {
-        // Extract file and rank from the square notation
-        char fileChar = square.charAt(0);
-        char rankChar = square.charAt(1);
-
-        // Convert file and rank characters to zero-based indices
-        int fileIndex = fileChar - 'a';
-        int rankIndex = rankChar - '1';
-
-        // Calculate the byte representation of the square
-        return (byte) ((7 - rankIndex) * 8 + fileIndex);
     }
 
 

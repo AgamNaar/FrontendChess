@@ -94,9 +94,10 @@ public class ServerRequestHandler {
      * @param gameID The ID of the game to resign.
      * @return A ServerResponse indicating the status of the resignation request.
      */
-    public ServerResponse reignTheGame(int gameID) {
+    public ServerResponse reignTheGame(GameUser user, int gameID) {
+        String payload = user.convertIntoJson();
         // Send a POST request to the server to resign the game
-        return sendNewRequestToServer(POST, EMPTY_PAYLOAD, RESIGN_THE_GAME_URL + gameID);
+        return sendNewRequestToServer(POST, payload, RESIGN_THE_GAME_URL + gameID);
     }
 
     /**
